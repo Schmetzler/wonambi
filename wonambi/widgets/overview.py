@@ -240,6 +240,7 @@ class Overview(QGraphicsView):
             if self.parent.traces.data is not None:
                 self.parent.traces.display()
                 self.parent.spectrum.display_window()
+                self.parent.timefreq.update()
 
         if self.parent.notes.annot is not None:
             self.parent.notes.set_stage_index()
@@ -468,7 +469,7 @@ class Overview(QGraphicsView):
 
     def mark_poi(self, times=None):
         """Mark selected signal, from list of start and end times.
-        
+
         Parameters
         ----------
         times : list of tuple of float
@@ -476,21 +477,21 @@ class Overview(QGraphicsView):
         """
         y_pos = BARS['quality']['pos0']
         height = 5
-        
+
         for rect in self.idx_poi:
             self.scene.removeItem(rect)
         self.idx_poi = []
-        
+
         if not times:
             return
-        
+
         for beg, end in times:
             rect = QGraphicsRectItem(beg, y_pos, end - beg, height)
             rect.setPen(NoPen)
             rect.setBrush(Qt.darkRed)
             self.scene.addItem(rect)
-            self.idx_poi.append(rect)            
-    
+            self.idx_poi.append(rect)
+
     def mousePressEvent(self, event):
         """Jump to window when user clicks on overview.
 

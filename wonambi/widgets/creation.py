@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import (QAction,
                              QMessageBox,
                              )
 
-from .settings import Settings # has to be first
+from .settings import Settings  # has to be first
 from .utils import ICON   # has to be second
 from .labels import Labels
 from .channels import Channels
@@ -21,6 +21,7 @@ from .notes import Notes, MergeDialog, ExportEventsDialog
 from .detect_dialogs import SpindleDialog, SWDialog
 from .analysis import AnalysisDialog
 from .spectrum import Spectrum
+from .timefreq import TimeFreq
 from .traces import Traces
 from .video import Video
 
@@ -46,6 +47,7 @@ def create_widgets(MAIN):
     #MAIN.plot_dialog = PlotDialog(MAIN)
     MAIN.overview = Overview(MAIN)
     MAIN.spectrum = Spectrum(MAIN)
+    MAIN.timefreq = TimeFreq(MAIN)
     MAIN.traces = Traces(MAIN)
     MAIN.video = Video(MAIN)
     MAIN.settings = Settings(MAIN)  # depends on all widgets apart from Info
@@ -72,6 +74,11 @@ def create_widgets(MAIN):
                  {'name': 'Spectrum',
                   'widget': MAIN.spectrum,
                   'main_area': Qt.RightDockWidgetArea,
+                  'extra_area': Qt.LeftDockWidgetArea,
+                  },
+                 {'name': 'Time Frequency',
+                  'widget': MAIN.timefreq,
+                  'main_area': Qt.BottomDockWidgetArea,
                   'extra_area': Qt.LeftDockWidgetArea,
                   },
                  {'name': 'Annotations',
@@ -115,6 +122,8 @@ def create_widgets(MAIN):
                           idx_docks['Video'])
     MAIN.tabifyDockWidget(idx_docks['Channels'],
                           idx_docks['Labels'])
+    MAIN.tabifyDockWidget(idx_docks['Overview'],
+                          idx_docks['Time Frequency'])
     idx_docks['Information'].raise_()
 
 
@@ -284,18 +293,18 @@ def create_menubar(MAIN):
     submenu_import_qual.addAction(actions['import_prana_qual'])
     submenu_import_qual.addAction(actions['import_remlogic_qual'])
     submenu_import_qual.addAction(actions['import_sandman_qual'])
-    
+
     menu_annot.addAction(actions['imp_evt_csv'])
     menu_annot.addSeparator()
-    
+
     submenu_export_staging = menu_annot.addMenu('Export Staging')
     submenu_export_staging.addAction(actions['export_to_csv'])
     submenu_export_staging.addAction(actions['export_to_remlogic'])
     submenu_export_staging.addAction(actions['export_to_remlogic_fr'])
 
-    menu_annot.addAction(actions['export_events'])    
+    menu_annot.addAction(actions['export_events'])
     menu_annot.addSeparator()
-    
+
     menu_annot.addAction(actions['export_sleepstats'])
 
     """ ------ ANALYSIS ------ """
