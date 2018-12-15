@@ -2,6 +2,7 @@
 """
 from logging import getLogger
 
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSettings, Qt
 from PyQt5.QtWidgets import (QDialogButtonBox,
                              QDialog,
@@ -9,6 +10,7 @@ from PyQt5.QtWidgets import (QDialogButtonBox,
                              QGroupBox,
                              QHBoxLayout,
                              QListWidget,
+                             QListWidgetItem,
                              QSplitter,
                              QStackedWidget,
                              QTextEdit,
@@ -16,7 +18,7 @@ from PyQt5.QtWidgets import (QDialogButtonBox,
                              QWidget,
                              )
 
-from .utils import FormInt, FormList, FormStr
+from .utils import FormInt, FormList, FormStr, ICON
 
 lg = getLogger(__name__)
 
@@ -34,6 +36,14 @@ DEFAULTS['overview'] = {'timestamp_steps': 60 * 60,
                         'overview_scale': 30,
                         }
 DEFAULTS['spectrum'] = {'x_min': 0.,
+                        'x_max': 30.,
+                        'x_tick': 10.,
+                        'y_min': -5.,
+                        'y_max': 5.,
+                        'y_tick': 5.,
+                        'log': True,
+                        }
+DEFAULTS['timefreq'] = {'x_min': 0.,
                         'x_max': 30.,
                         'x_tick': 10.,
                         'y_min': -5.,
@@ -102,13 +112,13 @@ class Settings(QDialog):
         bbox.clicked.connect(self.button_clicked)
 
         page_list = QListWidget()
-        page_list.setSpacing(1)
+        # page_list.setSpacing(1)
         page_list.currentRowChanged.connect(self.change_widget)
 
         pages = ['General', 'Overview', 'Signals', 'Channels', 'Spectrum',
-                 'Notes', 'Video']
+                 'Time Frequency', 'Notes', 'Video']
         for one_page in pages:
-            page_list.addItem(one_page)
+            page_list.addItem(QListWidgetItem(QIcon(ICON[one_page]), one_page))
 
         self.stacked = QStackedWidget()
         self.stacked.addWidget(self.config)
@@ -116,6 +126,7 @@ class Settings(QDialog):
         self.stacked.addWidget(self.parent.traces.config)
         self.stacked.addWidget(self.parent.channels.config)
         self.stacked.addWidget(self.parent.spectrum.config)
+        self.stacked.addWidget(self.parent.timefreq.config)
         self.stacked.addWidget(self.parent.notes.config)
         self.stacked.addWidget(self.parent.video.config)
 

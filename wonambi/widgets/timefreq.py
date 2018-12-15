@@ -26,21 +26,45 @@ from ..trans import timefrequency, select
 lg = getLogger(__name__)
 
 
+class ConfigTimeFreq(Config):
+
+    def __init__(self, update_widget):
+        super().__init__('timefreq', update_widget)
+
+    def create_config(self):
+
+        box0 = QGroupBox('Time Frequency')
+
+        for k in self.value:
+            self.index[k] = FormFloat()
+        self.index['log'] = FormBool('Log-transform')
+
+        form_layout = QFormLayout()
+        form_layout.addRow('Min X', self.index['x_min'])
+        form_layout.addRow('Max X', self.index['x_max'])
+        form_layout.addRow('Ticks on X-axis', self.index['x_tick'])
+        form_layout.addRow('Min Y', self.index['y_min'])
+        form_layout.addRow('Max Y', self.index['y_max'])
+        form_layout.addRow('Ticks on Y-axis', self.index['y_tick'])
+
+        form_layout.addWidget(self.index['log'])
+        box0.setLayout(form_layout)
+
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(box0)
+        main_layout.addStretch(1)
+
+        self.setLayout(main_layout)
+
+
 class TimeFreq(QWidget):
     """Plot the power spectrum for a specified channel.
-
-    Attributes
-    ----------
-    parent : instance of QMainWindow
-        the main window.
-
-    Notes
-    -----
-    If data contains NaN, it doesn't create any spectrum (feature or bug?).
     """
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
+
+        self.config = ConfigTimeFreq(self.update)
 
         self.idx_label = None
         self.idx_pixmap = None

@@ -67,7 +67,15 @@ ICON = {'application': join(icon_path, 'wonambi.png'),
         'event': join(oxy_path, 'edit-table-cell-merge.png'),
         'new_eventtype': join(oxy_path, 'edit-table-insert-column-right.png'),
         'del_eventtype': join(oxy_path, 'edit-table-delete-column.png'),
-        'help-about': join(oxy_path, 'help-about.png')
+        'help-about': join(oxy_path, 'help-about.png'),
+        'General': join(oxy_path, 'configure.png'),  # same names as the settings widget names
+        'Overview': join(oxy_path, 'configure.png'),
+        'Signals': join(oxy_path, 'configure.png'),
+        'Channels': join(oxy_path, 'configure.png'),
+        'Spectrum': join(oxy_path, 'configure.png'),
+        'Time Frequency': join(oxy_path, 'configure.png'),
+        'Notes': join(oxy_path, 'bookmarks-organize.png'),
+        'Video': join(oxy_path, 'configure.png'),
         }
 
 settings = QSettings("wonambi", "wonambi")
@@ -813,9 +821,9 @@ def freq_from_str(freq_str):
                 one_band = i[1:-1].split('-')
                 one_band = float(one_band[0]), float(one_band[1])
                 freq.append(one_band)
-    
+
         elif freq_str[0] == '(' and freq_str[-1] == ')':
-    
+
             if len(as_list) == 4:
                 start = float(as_list[0])
                 stop = float(as_list[1])
@@ -826,9 +834,9 @@ def freq_from_str(freq_str):
                     freq.append((i - halfwidth, i + halfwidth))
             else:
                 return None
-    
+
         else:
-            return None           
+            return None
     except:
         return None
 
