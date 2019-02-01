@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from numpy import (append,
                    cumsum,
                    where,
@@ -6,6 +6,7 @@ from numpy import (append,
 
 
 DEFAULT_DATETIME = datetime(2000, 1, 1)
+DEFAULT_DOB = date(1970, 1, 1)
 
 
 def decode(s):

@@ -4,6 +4,8 @@ from struct import unpack
 
 from numpy import array, dtype, empty, fromfile, iinfo, memmap, NaN, pad
 
+from .utils import DEFAULT_DATETIME, DEFAULT_DOB
+
 N_ZONES = 15
 MAX_SAMPLE = 128
 MAX_CAN_VIEW = 128
@@ -182,12 +184,18 @@ def _read_header(f):
     orig['surname'] = f.read(22).decode('utf-8').strip()
     orig['name'] = f.read(20).decode('utf-8').strip()
     month, day, year = unpack('bbb', f.read(3))
-    orig['date_of_birth'] = date(year + 1900, month, day)
+    if month == 0:
+        orig['date_of_birth'] = DEFAULT_DOB
+    else:
+        orig['date_of_birth'] = date(year + 1900, month, day)
     f.seek(19, SEEK_CUR)
 
     # recording
     day, month, year, hour, minute, sec = unpack('bbbbbb', f.read(6))
-    orig['start_time'] = datetime(year + 1900, month, day, hour, minute, sec)
+    if month == 0:
+        orig['start_time'] = DEFAULT_DATETIME
+    else:
+        orig['start_time'] = datetime(year + 1900, month, day, hour, minute, sec)
 
     acquisition_unit_code = unpack('h', f.read(2))[0]
     orig['acquisition_unit'] = ACQUISITION_UNIT.get(acquisition_unit_code,
